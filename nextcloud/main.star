@@ -5,7 +5,16 @@ POSTGRES_PASSWORD = "password"
 
 POSTGREST_PORT_ID = "http"
 
-def run(plan, args):
+def run(plan,
+    admin_username="admin",
+    admin_password="admin",
+):
+    """Launches a Nextcloud instance with an attached postgres database.
+
+    Args:
+        admin_username (string): The nextcloud admin username
+        admin_password (string): The nextcloud admin password
+    """
     # Add a Postgres server
     postgres = plan.add_service(
         name = "postgres",
@@ -40,7 +49,9 @@ def run(plan, args):
                 "POSTGRES_HOST": postgres.hostname,
                 "NEXTCLOUD_TRUSTED_DOMAINS": "nc.dartoxia.com",
                 "TRUSTED_PROXIES": "10.0.0.0/8",
-                "PHP_MEMORY_LIMIT":"1000M"
+                "PHP_MEMORY_LIMIT":"1000M",
+                "NEXTCLOUD_ADMIN_USER": admin_username,
+                "NEXTCLOUD_ADMIN_PASSWORD": admin_password
             }
         ),
     )
